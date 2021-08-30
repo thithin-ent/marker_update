@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   fiducial_msgs
   tf
+ roslib
 )
 
 #add_message_files(
@@ -33,7 +34,7 @@ find_package(OpenCV REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES marker_update
-  CATKIN_DEPENDS cv_bridge roscpp rospy sensor_msgs std_msgs tf
+  CATKIN_DEPENDS cv_bridge roscpp rospy sensor_msgs std_msgs tf roslib
 #  DEPENDS system_lib
 )
 

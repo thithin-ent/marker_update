@@ -1,10 +1,12 @@
 #ifndef MARKER_UPDATE
 #define MARKER_UPDATE
 #include "ros/ros.h"
+#include <ros/package.h>
 #include <eigen3/Eigen/Dense>
 #include <cmath>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <fiducial_msgs/FiducialTransformArray.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
