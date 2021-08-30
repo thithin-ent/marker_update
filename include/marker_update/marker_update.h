@@ -3,6 +3,7 @@
 #include "ros/ros.h"
 #include <eigen3/Eigen/Dense>
 #include <cmath>
+#include <string>
 #include <iostream>
 #include <fiducial_msgs/FiducialTransformArray.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
@@ -20,6 +21,7 @@ public:
     MatrixXd P_;
     MatrixXd Q_;
     Matrix3d T_B_C;
+    std::vector<tf::TransformBroadcaster> tf_br;
     marker_update();
     void correction(const VectorXd &Z, const MatrixXd &H, const VectorXd &z_hat);
     void posecallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &data);

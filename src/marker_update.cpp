@@ -10,17 +10,18 @@ marker_update::marker_update()
   Q_.resize(3, 3);
   Q_ << 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1;
   T_B_C << 0, 0, 1, -1, 0, 0, 0, -1, 0;
-  std::cout << "set_sstart" << std::endl;
+  tf_br.resize(randmark_N);
+  //std::cout << "set_sstart" << std::endl;
   pose_sub = nh.subscribe("pose", 1, &marker_update::posecallback, this);
   aruco_sub = nh.subscribe("fiducial_transforms", 1, &marker_update::markercallback, this);
 }
 
 void marker_update::correction(const VectorXd &Z, const MatrixXd &H, const VectorXd &z_hat)
 {
-  std::cout << "----X_--------" << std::endl;
-  std::cout << X_ << std::endl;
-  std::cout << "----P_--------" << std::endl;
-  std::cout << P_ << std::endl;
+  //std::cout << "----X_--------" << std::endl;
+  //std::cout << X_ << std::endl;
+  //std::cout << "----P_--------" << std::endl;
+  //std::cout << P_ << std::endl;
   MatrixXd K(3 + randmark_N * 3, 3);
   K = P_ * H.transpose() * (H * P_ * H.transpose() + Q_).inverse();
   X_ = X_ + K * (Z - z_hat);
@@ -41,6 +42,8 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
   int marker_index = data->detected_count;
   for (int i = 0; i < marker_index; i++)
   {
+    double error = data->transforms[i].image_error;
+    Q_ << error, 0, 0, 0, error, 0, 0, 0, error;
     int marker_id = data->transforms[i].fiducial_id;
     VectorXd Z(3);
     tf::Quaternion T_quaternion(data->transforms[i].transform.rotation.x, data->transforms[i].transform.rotation.y,
@@ -59,7 +62,7 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
     F << MatrixXd::Identity(3, 3), MatrixXd::Zero(3, randmark_N * 3),
         MatrixXd::Zero(3, 3 + marker_id * 3), MatrixXd::Identity(3, 3), MatrixXd::Zero(3, 3 * randmark_N - 3 * marker_id - 3);
 
-    std::cout << "----z_hat-------" << std::endl;
+    //std::cout << "----z_hat-------" << std::endl;
 
     Vector3d z_hat;
     z_hat << cos(X_(2)) * X_(3 + marker_id * 3) + sin(X_(2)) * X_(4 + marker_id * 3) - cos(X_(2)) * X_(0) - sin(X_(2)) * X_(1),
@@ -68,12 +71,20 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
     std::cout << z_hat << std::endl;
 
     correction(Z, low_H * F, z_hat);
-  }
-    static tf::TransformBroadcaster br;
+
     tf::Transform transform;
-    transform.setOrigin(tf::Vector3(X_(3), X_(4), 0.0));
+    transform.setOrigin(tf::Vector3(X_(3+marker_id*3), X_(4+marker_id*3), 0.0));
     tf::Quaternion q;
-    q.setRPY(M_PI/2, 0, -M_PI/2 + X_(5));
+    q.setRPY(M_PI/2, 0, -M_PI/2 + X_(5+marker_id*3));
     transform.setRotation(q);
-    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", "markerupdate_1"));
+    std::string str("markerupdate_");
+    tf_br[marker_id].sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", str + std::to_string(marker_id)));
+  }
+
 }
+    
+    
+    
+    
+    
+    
