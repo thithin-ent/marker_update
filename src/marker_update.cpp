@@ -44,7 +44,7 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
     int marker_id = data->transforms[i].fiducial_id;
     VectorXd Z(3);
     tf::Quaternion T_quaternion(data->transforms[i].transform.rotation.x, data->transforms[i].transform.rotation.y,
-                              data->transforms[i].transform.rotation.z, data->transforms[i].transform.rotation.w);
+                                data->transforms[i].transform.rotation.z, data->transforms[i].transform.rotation.w);
 
     double roll, pitch, yaw;
     tf::Matrix3x3(T_quaternion).getRPY(roll, pitch, yaw);
@@ -68,5 +68,13 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
     std::cout << z_hat << std::endl;
 
     correction(Z, low_H * F, z_hat);
+
+    static tf::TransformBroadcaster br;
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(X_(3), X_(4), 0.0));
+    tf::Quaternion q;
+    q.setRPY(0, 0, X_(5));
+    transform.setRotation(q);
+    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "markerupdate_1"));
   }
 }
