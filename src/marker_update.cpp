@@ -8,7 +8,7 @@ marker_update::marker_update()
   P_ << MatrixXd::Zero(3, 3), MatrixXd::Zero(3, randmark_N * 3),
       MatrixXd::Zero(randmark_N * 3, 3), 50000 * MatrixXd::Identity(randmark_N * 3, randmark_N * 3);
   Q_.resize(3, 3);
-  Q_ << 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1;
+  Q_ << 1, 0, 0, 0, 1, 0, 0, 0, 1;
   T_B_C << 0, 0, 1, -1, 0, 0, 0, -1, 0;
   tf_br.resize(randmark_N);
   //std::cout << "set_sstart" << std::endl;
@@ -43,7 +43,7 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
   for (int i = 0; i < marker_index; i++)
   {
     double error = data->transforms[i].image_error;
-    Q_ << error, 0, 0, 0, error, 0, 0, 0, error;
+    //Q_ << error, 0, 0, 0, error, 0, 0, 0, error;
     int marker_id = data->transforms[i].fiducial_id;
     VectorXd Z(3);
     tf::Quaternion T_quaternion(data->transforms[i].transform.rotation.x, data->transforms[i].transform.rotation.y,
