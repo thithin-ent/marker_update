@@ -1,7 +1,8 @@
 #include "marker_update/marker_update.h"
 
-marker_update::marker_update()
+marker_update::marker_update(const int &randmark)
 {
+  randmark_N = randmark;
   X_.resize(3 + randmark_N * 3);
   X_ << VectorXd::Zero(3), VectorXd::Zero(randmark_N * 3);
   P_.resize(3 + randmark_N * 3, 3 + randmark_N * 3);
@@ -68,23 +69,16 @@ void marker_update::markercallback(const fiducial_msgs::FiducialTransformArray::
     z_hat << cos(X_(2)) * X_(3 + marker_id * 3) + sin(X_(2)) * X_(4 + marker_id * 3) - cos(X_(2)) * X_(0) - sin(X_(2)) * X_(1),
         -sin(X_(2)) * X_(3 + marker_id * 3) + cos(X_(2)) * X_(4 + marker_id * 3) + sin(X_(2)) * X_(0) - cos(X_(2)) * X_(1),
         X_(5 + marker_id * 3) - X_(2);
-    std::cout << z_hat << std::endl;
+    //std::cout << z_hat << std::endl;
 
     correction(Z, low_H * F, z_hat);
 
     tf::Transform transform;
-    transform.setOrigin(tf::Vector3(X_(3+marker_id*3), X_(4+marker_id*3), 0.0));
+    transform.setOrigin(tf::Vector3(X_(3 + marker_id * 3), X_(4 + marker_id * 3), 0.0));
     tf::Quaternion q;
-    q.setRPY(M_PI/2, 0, -M_PI/2 + X_(5+marker_id*3));
+    q.setRPY(M_PI / 2, 0, -M_PI / 2 + X_(5 + marker_id * 3));
     transform.setRotation(q);
     std::string str("markerupdate_");
     tf_br[marker_id].sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", str + std::to_string(marker_id)));
   }
-
 }
-    
-    
-    
-    
-    
-    

@@ -18,13 +18,13 @@ using namespace Eigen;
 class marker_update
 {
 public:
-    int randmark_N = 2;
+    int randmark_N ;
     VectorXd X_;
     MatrixXd P_;
     MatrixXd Q_;
     Matrix3d T_B_C;
     std::vector<tf::TransformBroadcaster> tf_br;
-    marker_update();
+    marker_update(const int &randmark);
     void correction(const VectorXd &Z, const MatrixXd &H, const VectorXd &z_hat);
     void posecallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &data);
     void markercallback(const fiducial_msgs::FiducialTransformArray::ConstPtr &data);
