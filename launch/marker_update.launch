@@ -1,7 +1,4 @@
-<launch>
-  <include file="$(find indoor_2d_nav)/launch/sparo_2d_navigation_omor1.launch"/>
-  <include file="$(find indoor_2d_nav)/launch/aruco_detect_i2n.launch"/>
-  
+<launch>  
   <rosparam command="load" file="$(find marker_update)/config/config.yaml" />
 
   <node pkg="marker_update" type="marker_update" name="marker_update">

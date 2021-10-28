@@ -8,7 +8,6 @@ project(marker_update)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
   roscpp
   rospy
   sensor_msgs
@@ -16,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   fiducial_msgs
   tf
  roslib
+indoor_2d_nav
 )
 
 #add_message_files(
@@ -47,6 +47,9 @@ include_directories(
 
 add_executable(marker_update src/marker_update.cpp src/marker_update_node.cpp)
 target_link_libraries(marker_update ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(tf_changer src/tf_changer.cpp)
+target_link_libraries(tf_changer ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 #add_executable(opencv_sub src/sub.cpp)
 #target_link_libraries(opencv_sub ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
