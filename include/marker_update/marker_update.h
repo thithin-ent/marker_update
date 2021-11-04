@@ -13,6 +13,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <tf/transform_broadcaster.h>
 #include <indoor_2d_nav/FiducialTransformArray_i2n.h>
+#include <std_msgs/Float32MultiArray.h>
 
 using namespace std;
 using namespace Eigen;
@@ -23,6 +24,7 @@ public:
     MarkerUpdate(const int &landmark);
     void correction(const VectorXd &Z, const MatrixXd &H, const VectorXd &z_hat);
     void posecallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &data);
+    void robot_poscallback(const std_msgs::Float32MultiArray::ConstPtr &data);
     void markercallback(const indoor_2d_nav::FiducialTransformArray_i2n::ConstPtr &data);
     void set_robot_x(const double &robot_x, const double &robot_y, const double &robot_yaw);
     int get_markers_number();
@@ -39,6 +41,7 @@ private:
     ros::NodeHandle nh;
     //ros::Publisher pub_;
     ros::Subscriber pose_sub;
+    ros::Subscriber robot_position_sub;
     ros::Subscriber aruco_sub;
 };
 #endif

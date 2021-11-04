@@ -12,7 +12,8 @@ MarkerUpdate::MarkerUpdate(const int &landmark)
     Q_ << 1, 0, 0, 0, 1, 0, 0, 0, 1;
     tf_br.resize(landmark_N_);
     //std::cout << "set_sstart" << std::endl;
-    //pose_sub = nh.subscribe("pose", 1, &MarkerUpdate::posecallback, this);
+    robot_position_sub = nh.subscribe("robot_position", 1, &MarkerUpdate::robot_poscallback, this);
+    pose_sub = nh.subscribe("pose", 1, &MarkerUpdate::posecallback, this);
     aruco_sub = nh.subscribe("fiducial_transforms", 1, &MarkerUpdate::markercallback, this);
 }
 
@@ -31,9 +32,6 @@ void MarkerUpdate::correction(const VectorXd &Z, const MatrixXd &H, const Vector
 void MarkerUpdate::posecallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &data)
 {
 
-    X_(0) = data->pose.pose.position.x;
-    X_(1) = data->pose.pose.position.y;
-    X_(2) = tf::getYaw(data->pose.pose.orientation);
     P_(0, 0) = data->pose.covariance[0];
     P_(0, 1) = data->pose.covariance[1];
     P_(1, 0) = data->pose.covariance[6];
@@ -42,6 +40,16 @@ void MarkerUpdate::posecallback(const geometry_msgs::PoseWithCovarianceStamped::
     //std::cout << "-------------" << std::endl;
     //std::cout << P_ << std::endl;
     //std::cout << "-------------" << std::endl;
+}
+
+void MarkerUpdate::robot_poscallback(const std_msgs::Float32MultiArray::ConstPtr &data){
+    X_(0) = data->data[0];
+    X_(1) = data->data[1];
+    X_(2) = data->data[2];
+    std::cout << data << std::endl;
+    std::cout << "-------------" << std::endl;
+    std::cout << X_ << std::endl;
+    std::cout << "-------------" << std::endl;
 }
 
 void MarkerUpdate::markercallback(const indoor_2d_nav::FiducialTransformArray_i2n::ConstPtr &data)

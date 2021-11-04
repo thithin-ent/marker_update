@@ -9,15 +9,15 @@ int main(int argc, char *argv[])
 
     tf::TransformListener listener;
 
-    ros::Rate rate(10.0);
+    ros::Rate rate(30.0);
 
     while (nh.ok())
     {
         tf::StampedTransform transform;
         try
         {
-            listener.waitForTransform("/base_footprint", "/map", ros::Time(0), ros::Duration(3.0));
-            listener.lookupTransform("/base_footprint", "/map", ros::Time(0), transform);
+            listener.waitForTransform("/map", "/base_footprint" , ros::Time(0), ros::Duration(3.0));
+            listener.lookupTransform("/map", "/base_footprint", ros::Time(0), transform);
         }
         catch (tf::TransformException ex)
         {

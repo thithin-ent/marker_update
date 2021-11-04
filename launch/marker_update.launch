@@ -1,8 +1,10 @@
 <launch>  
   <rosparam command="load" file="$(find marker_update)/config/config.yaml" />
 
-  <node pkg="marker_update" type="marker_update" name="marker_update">
-  </node>
+
+
+  <node pkg="marker_update" type="tf_changer" name="tf_changer" />
+  <node pkg="marker_update" type="marker_update" name="marker_update" />
   
    
 </launch>
