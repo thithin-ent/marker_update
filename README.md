@@ -2,6 +2,8 @@
 
 Marker_slam은 lidar를 기반으로 한 map에서 ArUco 마커의 위치를 자동으로 등록하기 위한 패키지입니다. Marker_slam 패키지를 실행하기 위해선 다른 localization이나 slam 패키지를 통해 로봇의 위치를 추정하여 map과 base_link간의 transform정보가 있어야 하고, robot_state_publisher를 통해 base_link와 camera_link간의 transform정보가 있어야합니다. Marker_slam은 이미 만들어진 Grid map에서 lidar localization을 이용하여 로봇위치를 추정한 후 마커를 mapping할 수 있습니다.
 
+<p align="center"><img src="/fig/image.gif"></p>
+
 # How to use
 marker_slam 기능을 사용하기 위해서는 먼저 lidar를 이용한 map이 필요합니다. lidar로 map을 제작하기 위한 명령어는 다음과 같습니다.
 
@@ -36,7 +38,3 @@ Landmark_N (int)
 
 Marker_txt (str)
  - 저장되는 marker map의 이름입니다. Marker_slam의 marker폴더 위치에 지정된 이름으로 저장됩니다.
-
- # example
-
- 사진 넣기
