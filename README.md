@@ -4,17 +4,17 @@ Marker_slam은 lidar를 기반으로 한 map에서 ArUco 마커의 위치를 자
 
 # How to use
 marker_slam 기능을 사용하기 위해서는 먼저 lidar를 이용한 map이 필요합니다. lidar로 map을 제작하기 위한 명령어는 다음과 같습니다.
-<Blockquote>
-roslaunch marker_slam lidar_mapping.launch
-</Blockquote>
+
+    roslaunch marker_slam lidar_mapping.launch
+
 lidar로 map을 제작한 후 다음 명령어로 map을 저장합니다.
-<Blockquote>
-roslaunch marker_slam lidar_map_save.launch
-</Blockquote>
+
+    roslaunch marker_slam lidar_map_save.launch
+
 이후 lidar로 만든 map을 기반으로 마커의 맵을 제작합니다. 해당 명령어는 다음과 같습니다.
-<Blockquote>
-roslaunch marker_slam marker_update.launch
-</Blockquote>
+
+    roslaunch marker_slam marker_update.launch
+
 
 # Subscribed Topic & 입력 정보
 /Fiducial_transfrom (indoor_2d_nav_aruco_detect/FiducialTransformArray_i2n)
